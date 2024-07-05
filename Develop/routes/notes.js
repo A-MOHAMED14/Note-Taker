@@ -1,17 +1,17 @@
 const express = require("express");
 const notes = express.Router();
 const fs = require("fs");
+const { readFromFile } = require("../helpers/fsUtils.js");
 const { v4: uuidv4 } = require("uuid");
 
 notes.get("/", (req, res) => {
-  fs.readFile("./db/db.json", "utf-8", (err, data) => {
-    if (err) {
+  console.info(`${req.method} request recieved for notes`);
+  readFromFile("./db/db.json", "utf-8")
+    .then((data) => res.json(JSON.parse(data)))
+    .catch((err) => {
       console.error(err);
-    } else {
-      const jsonData = JSON.parse(data);
-      return res.json(jsonData);
-    }
-  });
+      res.status(500).json({ error: "Failed to read file" });
+    });
 });
 
 notes.post("/", (req, res) => {
