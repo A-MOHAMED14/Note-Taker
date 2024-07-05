@@ -1,9 +1,9 @@
 const express = require("express");
-const note = express.Router();
+const notes = express.Router();
 const fs = require("fs/promises");
 const { v4: uuidv4 } = require("uuid");
 
-note.get("/", (req, res) => {
+notes.get("/", (req, res) => {
   fs.readFile("./db/db.json", "utf-8", (err, data) => {
     if (err) {
       console.error(err);
@@ -14,7 +14,7 @@ note.get("/", (req, res) => {
   });
 });
 
-note.post("/", (req, res) => {
+notes.post("/", (req, res) => {
   console.log(req.body);
   const { title, text } = req.body;
 
@@ -51,4 +51,4 @@ note.post("/", (req, res) => {
   }
 });
 
-module.exports = note;
+module.exports = notes;
