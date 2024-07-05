@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const api = require("./routes/index.js");
 
 const app = express();
 const port = process.env.PORT || 3003;
@@ -8,6 +9,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
+
+app.use("/api", api);
 
 app.get("/notes", (req, res) => {
   console.log(`${req.method} request to ${req.path} recieved`);
