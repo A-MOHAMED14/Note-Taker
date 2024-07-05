@@ -9,6 +9,16 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
+app.get("/notes", (req, res) => {
+  console.log(`${req.method} request to ${req.path} recieved`);
+  res.sendFile(path.join(__dirname, "/public/notes.html"));
+});
+
+app.get("*", (req, res) => {
+  console.log(`${req.method} request to ${req.path} recieved`);
+  res.sendFile(path.join(__dirname, "/public/index.html"));
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
