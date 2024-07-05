@@ -33,7 +33,7 @@ notes.post("/", (req, res) => {
 
         jsonData.push(newNote);
 
-        fs.writeFile("./db/db.json", JSON.stringify(jsonData), (err) => {
+        fs.writeFile("./db/db.json", JSON.stringify(jsonData, null,  4), (err) => {
           if (err) {
             console.error(err);
             res.json("Error in posting note");
