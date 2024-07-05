@@ -21,32 +21,4 @@ const readAndAppend = function (filePath, content) {
   });
 };
 
-module.exports = { readFromFile, readAndAppend };
-
-// fs.readFile("./db/db.json", "utf-8", (err, data) => {
-//   if (err) {
-//     console.error(err);
-//   } else {
-//     const jsonData = JSON.parse(data);
-
-//     jsonData.push(newNote);
-
-//     fs.writeFile(
-//       "./db/db.json",
-//       JSON.stringify(jsonData, null, 4),
-//       (err) => {
-//         if (err) {
-//           console.error(err);
-//           res.json("Error in posting note");
-//         } else {
-//           const response = {
-//             status: "Note added successfully",
-//             body: newNote,
-//           };
-
-//           res.json(response);
-//         }
-//       }
-//     );
-//   }
-// });
+module.exports = { readFromFile, writeToFile, readAndAppend };
