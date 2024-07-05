@@ -1,7 +1,11 @@
 const express = require("express");
 const notes = express.Router();
 const fs = require("fs");
-const { readFromFile, readAndAppend } = require("../helpers/fsUtils.js");
+const {
+  readFromFile,
+  writeToFile,
+  readAndAppend,
+} = require("../helpers/fsUtils.js");
 const { v4: uuidv4 } = require("uuid");
 
 notes.get("/", (req, res) => {
@@ -39,37 +43,35 @@ notes.post("/", (req, res) => {
 });
 
 notes.delete("/:id", (req, res) => {
-  const uuid = req.params.id;
+  console.info(`${req.method} request recieved for notes`);
 
-  fs.readFile("./db/db.json", "utf-8", (err, data) => {
-    if (err) {
-      console.error(err);
-    } else {
+  const id = req.params.id;
+
+  readFromFile("./db/db.json", "utf-8")
+    .then((data) => {
       const jsonData = JSON.parse(data);
 
-      const noteIndex = jsonData.findIndex(
-        (note) => note.uuid === "deca8468-e94f-41a3-8031-4fbbc2180c64"
-      );
+      const noteIndex = jsonData.findIndex((note) => note.uuid === id);
 
       console.log("Note to delete index position is:", noteIndex);
 
       jsonData.splice(noteIndex, 1);
 
-      fs.writeFile("./db/db.json", JSON.stringify(jsonData, null, 4), (err) => {
-        if (err) {
-          console.error(err);
-          res.json("Error deleting note");
-        } else {
-          const response = {
-            status: "Note deleted successfully",
-            body: jsonData,
-          };
+      return jsonData;
+    })
+    .then((data) => {
+      writeToFile("./db/db.json", data);
+      const response = {
+        status: "Note deleted successfully",
+        body: data,
+      };
 
-          res.json(response);
-        }
-      });
-    }
-  });
+      res.json(response);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.json("Error in deleting note");
+    });
 });
 
 module.exports = notes;
