@@ -13,12 +13,10 @@ app.use(express.static("public"));
 app.use("/api", api);
 
 app.get("/notes", (req, res) => {
-  console.log(`${req.method} request to ${req.path} recieved`);
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
 app.get("*", (req, res) => {
-  console.log(`${req.method} request to ${req.path} recieved`);
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
