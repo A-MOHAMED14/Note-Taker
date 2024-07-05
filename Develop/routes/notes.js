@@ -1,7 +1,7 @@
 const express = require("express");
 const notes = express.Router();
 const fs = require("fs");
-const { readFromFile } = require("../helpers/fsUtils.js");
+const { readFromFile, readAndAppend } = require("../helpers/fsUtils.js");
 const { v4: uuidv4 } = require("uuid");
 
 notes.get("/", (req, res) => {
@@ -15,7 +15,7 @@ notes.get("/", (req, res) => {
 });
 
 notes.post("/", (req, res) => {
-  console.log(req.body);
+  console.info(`${req.method} request recieved for notes`);
   const { title, text } = req.body;
 
   if (title && text) {
@@ -25,33 +25,16 @@ notes.post("/", (req, res) => {
       uuid: uuidv4(),
     };
 
-    fs.readFile("./db/db.json", "utf-8", (err, data) => {
-      if (err) {
-        console.error(err);
-      } else {
-        const jsonData = JSON.parse(data);
+    readAndAppend("./db/db.json", newNote);
 
-        jsonData.push(newNote);
+    const response = {
+      status: "Note added successfully",
+      body: newNote,
+    };
 
-        fs.writeFile(
-          "./db/db.json",
-          JSON.stringify(jsonData, null, 4),
-          (err) => {
-            if (err) {
-              console.error(err);
-              res.json("Error in posting note");
-            } else {
-              const response = {
-                status: "Note added successfully",
-                body: newNote,
-              };
-
-              res.json(response);
-            }
-          }
-        );
-      }
-    });
+    res.status(201).json(response);
+  } else {
+    res.json("Error in posting note");
   }
 });
 
