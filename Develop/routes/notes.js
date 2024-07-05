@@ -1,12 +1,12 @@
 const express = require("express");
 const notes = express.Router();
 const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 const {
   readFromFile,
   writeToFile,
   readAndAppend,
 } = require("../helpers/fsUtils.js");
-const { v4: uuidv4 } = require("uuid");
 
 notes.get("/", (req, res) => {
   console.info(`${req.method} request recieved for notes`);
@@ -52,8 +52,6 @@ notes.delete("/:id", (req, res) => {
       const jsonData = JSON.parse(data);
 
       const noteIndex = jsonData.findIndex((note) => note.uuid === id);
-
-      console.log("Note to delete index position is:", noteIndex);
 
       jsonData.splice(noteIndex, 1);
 
