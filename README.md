@@ -78,7 +78,7 @@ node server.js
 
 ## Code Preview 💻
 
-![code preview snippet](./public/images/code-screenshot.png)
+![code preview snippet](./Develop/public/assets/images/code-preview-screenshot.png)
 
 ## Contributing 🤝
 
